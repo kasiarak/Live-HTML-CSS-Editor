@@ -1,0 +1,12 @@
+:root {
+  --main-color: #000000; 
+  --secondary-color: #ffffff; 
+}
+html{
+  max-width: 100%;
+  overflow-x: hidden; 
+}
+body{
+  background-color: var(--main-color);
+  color: var(--secondary-color);
+}
