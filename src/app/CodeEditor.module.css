@@ -14,3 +14,22 @@
 .output{
     text-align: center;
 }
+.tabs{
+    display: flex;
+}
+.openTab, .closeTab{
+    background-color: #24292d;
+    display: flex;
+    justify-self: center;
+    align-items: center;
+    padding: 15px 20px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+.closeTab{
+    background-color: #1b1e20;
+    color: rgb(144, 144, 144);
+}
+.openTab{
+    box-shadow: 0px 0px 15px rgb(31, 31, 31);
+}
