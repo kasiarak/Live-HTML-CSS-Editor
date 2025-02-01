@@ -1,0 +1,16 @@
+.codeEditorContainer{
+    margin-top: 30px;
+    width: 100vw;
+    height: 100vh;
+}
+.codeEditor{
+    width: 100%;
+    height: 75%;
+    display: flex;
+}
+.cssAndHtmlContainer, .output{
+    flex: 1; 
+}
+.output{
+    text-align: center;
+}
