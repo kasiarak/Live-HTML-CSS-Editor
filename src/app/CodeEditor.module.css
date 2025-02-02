@@ -18,6 +18,11 @@
 .output{
     text-align: center;
 }
+.output iframe{
+    background-color: white;
+    border: none;
+    margin-top: 21px;
+}
 .tabs{
     display: flex;
 }

@@ -8,14 +8,25 @@ import styles from "./CodeEditor.module.css";
 
 function CodeEditor() {
   const [htmlTabIsOpen, setHtmlTabIsOpen] = useState<boolean>(true);
-  const [htmlCode, setHtmlCode] = useState<string>("<h1>Code here<h1>\n");
-  const [cssCode, setCssCode] = useState<string>("h1{\n    font-size: 14px;\n}\n");
+  const [htmlCode, setHtmlCode] = useState<string>("<h1>Code here</h1>\n");
+  const [cssCode, setCssCode] = useState<string>("h1{\n    color: blue;\n}\n");
 
   const handleHtmlChange = (newHtml: string) => setHtmlCode(newHtml);
   const handleCssChange = (newCss: string) => setCssCode(newCss);
 
   const openCSSTab = () => setHtmlTabIsOpen(false);
   const openHTMLTab = () => setHtmlTabIsOpen(true);
+
+  const finalCode = `
+  <html>
+    <head>
+      <style>${cssCode}</style>
+    </head>
+    <body>
+      ${htmlCode}
+    </body>
+  </html>
+`;
 
   return (
     <div>
@@ -65,6 +76,10 @@ function CodeEditor() {
           </div>
           <div className={styles.output}>
             <h2>Output</h2>
+            <iframe
+            style={{ width: '100%', height: '100%' }}
+            srcDoc={finalCode}
+            />
           </div>
         </div>
       </div>
