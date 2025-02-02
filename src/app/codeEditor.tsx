@@ -1,5 +1,5 @@
-"use client";
-import { useEffect, useState } from "react";
+"use client"
+import { useEffect, useRef, useState } from "react";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-html";
 import "ace-builds/src-noconflict/mode-css";
@@ -12,47 +12,31 @@ function CodeEditor() {
   const [htmlCode, setHtmlCode] = useState<string>("");
   const [cssCode, setCssCode] = useState<string>("");
 
-  const handleHtmlChange = (newHtml: string) => {
-    setHtmlCode(newHtml);
-    localStorage.setItem('htmlCode', newHtml);
-};
-  const handleCssChange = (newCss: string) => {
-    setCssCode(newCss);
-    localStorage.setItem('cssCode', newCss);
-};
+  const htmlEditorRef = useRef<AceEditor | null>(null);
+  const cssEditorRef = useRef<AceEditor | null>(null);
 
   useEffect(() => {
-    if(localStorage.getItem('htmlCode') !== null){
-        setHtmlCode(String(localStorage.getItem('htmlCode'))); 
+    if (htmlTabIsOpen) {
+      htmlEditorRef.current?.editor.focus();
+    } else {
+      cssEditorRef.current?.editor.focus();
     }
-    if(localStorage.getItem('cssCode') !== null){
-        setCssCode(String(localStorage.getItem('cssCode'))); 
-    }
-    if(localStorage.getItem('htmlCode') === null){
-        setHtmlCode("<h1>Code here</h1>\n");
-    }
-    if(localStorage.getItem('cssCode') === null){
-        setCssCode("h1{\ncolor: blue;\n}\n");
-    }
-  },[]);
+  }, [htmlTabIsOpen]);
 
-  const openCSSTab = () => setHtmlTabIsOpen(false);
-  const openHTMLTab = () => setHtmlTabIsOpen(true);
-
-  const handleDownload = () => {
-    downloadFiles(htmlCode, cssCode);
+  const handleHtmlChange = (newHtml: string) => {
+    setHtmlCode(newHtml);
+    localStorage.setItem("htmlCode", newHtml);
   };
 
-  const finalCode = `
-  <html>
-    <head>
-      <style>${cssCode}</style>
-    </head>
-    <body>
-      ${htmlCode}
-    </body>
-  </html>
-`;
+  const handleCssChange = (newCss: string) => {
+    setCssCode(newCss);
+    localStorage.setItem("cssCode", newCss);
+  };
+
+  useEffect(() => {
+    setHtmlCode(localStorage.getItem("htmlCode") || "<h1>Code here</h1>\n");
+    setCssCode(localStorage.getItem("cssCode") || "h1{\ncolor: blue;\n}\n");
+  }, []);
 
   return (
     <div>
@@ -60,56 +44,46 @@ function CodeEditor() {
         <div className={styles.codeEditor}>
           <div className={styles.cssAndHtmlContainer}>
             <div className={styles.tabs}>
-              <div
-                className={htmlTabIsOpen ? styles.openTab : styles.closeTab}
-                onClick={openHTMLTab}
-              >
+              <div className={htmlTabIsOpen ? styles.openTab : styles.closeTab} onClick={() => setHtmlTabIsOpen(true)}>
                 HTML
               </div>
-              <div
-                className={htmlTabIsOpen ? styles.closeTab : styles.openTab}
-                onClick={openCSSTab}
-              >
+              <div className={htmlTabIsOpen ? styles.closeTab : styles.openTab} onClick={() => setHtmlTabIsOpen(false)}>
                 CSS
               </div>
             </div>
-            {htmlTabIsOpen && (
-              <div className={styles.editor}>
-                <AceEditor
-                  mode="html"
-                  theme="github_dark"
-                  value={htmlCode}
-                  onChange={handleHtmlChange}
-                  name="html-editor"
-                  width="100%"
-                  height="100%"
-                />
-              </div>
-            )}
-            {!htmlTabIsOpen && (
-              <div className={styles.editor}>
-                <AceEditor
-                  mode="css"
-                  theme="github_dark"
-                  value={cssCode}
-                  onChange={handleCssChange}
-                  name="css-editor"
-                  width="100%"
-                  height="100%"
-                />
-              </div>
-            )}
+            {htmlTabIsOpen ? 
+              <AceEditor
+                ref={htmlEditorRef} 
+                mode="html"
+                theme="github_dark"
+                value={htmlCode}
+                onChange={handleHtmlChange}
+                name="html-editor"
+                width="100%"
+                height="100%"
+              />
+             : 
+              <AceEditor
+                ref={cssEditorRef}
+                mode="css"
+                theme="github_dark"
+                value={cssCode}
+                onChange={handleCssChange}
+                name="css-editor"
+                width="100%"
+                height="100%"
+              />
+            }
           </div>
           <div className={styles.output}>
             <h2>Output</h2>
-            <iframe
-            style={{ width: '100%', height: '100%' }}
-            srcDoc={finalCode}
-            />
+            <iframe style={{ width: "100%", height: "100%" }} srcDoc={`<html><head><style>${cssCode}</style></head><body>${htmlCode}</body></html>`} />
           </div>
         </div>
         <div className={styles.buttons}>
-            <button onClick={handleDownload} className={styles.downloadBtn}>Download Files</button>
+          <button onClick={() => downloadFiles(htmlCode, cssCode)} className={styles.downloadBtn}>
+            Download Files
+          </button>
         </div>
       </div>
     </div>
