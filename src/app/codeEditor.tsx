@@ -82,6 +82,9 @@ function CodeEditor() {
             />
           </div>
         </div>
+        <div className={styles.buttons}>
+            <button className={styles.downloadBtn}>Download Files</button>
+        </div>
       </div>
     </div>
   );
