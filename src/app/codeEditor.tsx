@@ -1,21 +1,30 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-html";
 import "ace-builds/src-noconflict/mode-css";
 import "ace-builds/src-noconflict/theme-github_dark";
 import styles from "./CodeEditor.module.css"; 
+import { downloadFiles } from "./downloadUtils";
 
 function CodeEditor() {
   const [htmlTabIsOpen, setHtmlTabIsOpen] = useState<boolean>(true);
-  const [htmlCode, setHtmlCode] = useState<string>("<h1>Code here</h1>\n");
-  const [cssCode, setCssCode] = useState<string>("h1{\n    color: blue;\n}\n");
+  const [htmlCode, setHtmlCode] = useState<string>("");
+  const [cssCode, setCssCode] = useState<string>("");
 
-  const handleHtmlChange = (newHtml: string) => setHtmlCode(newHtml);
-  const handleCssChange = (newCss: string) => setCssCode(newCss);
+  const handleHtmlChange = (newHtml: string) => {
+    setHtmlCode(newHtml);
+};
+  const handleCssChange = (newCss: string) => {
+    setCssCode(newCss);
+};
 
   const openCSSTab = () => setHtmlTabIsOpen(false);
   const openHTMLTab = () => setHtmlTabIsOpen(true);
+
+  const handleDownload = () => {
+    downloadFiles(htmlCode, cssCode);
+  };
 
   const finalCode = `
   <html>
@@ -83,7 +92,7 @@ function CodeEditor() {
           </div>
         </div>
         <div className={styles.buttons}>
-            <button className={styles.downloadBtn}>Download Files</button>
+            <button onClick={handleDownload} className={styles.downloadBtn}>Download Files</button>
         </div>
       </div>
     </div>

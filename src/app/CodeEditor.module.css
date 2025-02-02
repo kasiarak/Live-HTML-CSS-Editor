@@ -21,7 +21,10 @@
 .output iframe{
     background-color: white;
     border: none;
-    margin-top: 21px;
+    margin-top: 16px;
+}
+.output h2{
+    margin-top: 5px;
 }
 .tabs{
     display: flex;
