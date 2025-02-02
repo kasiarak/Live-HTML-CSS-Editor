@@ -14,10 +14,27 @@ function CodeEditor() {
 
   const handleHtmlChange = (newHtml: string) => {
     setHtmlCode(newHtml);
+    localStorage.setItem('htmlCode', newHtml);
 };
   const handleCssChange = (newCss: string) => {
     setCssCode(newCss);
+    localStorage.setItem('cssCode', newCss);
 };
+
+  useEffect(() => {
+    if(localStorage.getItem('htmlCode') !== null){
+        setHtmlCode(String(localStorage.getItem('htmlCode'))); 
+    }
+    if(localStorage.getItem('cssCode') !== null){
+        setCssCode(String(localStorage.getItem('cssCode'))); 
+    }
+    if(localStorage.getItem('htmlCode') === null){
+        setHtmlCode("<h1>Code here</h1>\n");
+    }
+    if(localStorage.getItem('cssCode') === null){
+        setCssCode("h1{\ncolor: blue;\n}\n");
+    }
+  },[]);
 
   const openCSSTab = () => setHtmlTabIsOpen(false);
   const openHTMLTab = () => setHtmlTabIsOpen(true);
